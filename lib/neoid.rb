@@ -88,7 +88,7 @@ module Neoid
     end
 
     def search(types, term, options = {})
-      options = options.reverse_merge(limit: 15)
+      options = options.reverse_merge(:limit => 15)
 
       types = [*types]
 
