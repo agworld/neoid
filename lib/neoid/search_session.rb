@@ -24,7 +24,7 @@ module Neoid
         all
       }
 
-      ids_by_klass.map { |klass, ids| klass.where(id: ids) }.flatten
+      ids_by_klass.map { |klass, ids| klass.where(:id => ids) }.flatten
     end
   end
 end

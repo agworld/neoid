@@ -7,11 +7,11 @@ describe Neoid::ModelAdditions do
       it "should call neo_create on a neo_node for user" do
         User.any_instance.should_receive(:neo_create)
 
-        User.create(name: "Elad Ossadon")
+        User.create(:name => "Elad Ossadon")
       end
   
       it "should create a neo_node for user" do
-        user = User.create(name: "Elad Ossadon", slug: "elado")
+        user = User.create(:name => "Elad Ossadon", :slug => "elado")
       
         user.neo_node.should_not be_nil
         
@@ -21,7 +21,7 @@ describe Neoid::ModelAdditions do
       end
 
       it "should create a neo_node for movie" do
-        movie = Movie.create(name: "Memento", slug: "memento-1999", year: 1999)
+        movie = Movie.create(:name => "Memento", :slug => "memento-1999", :year => 1999)
       
         movie.neo_node.should_not be_nil
         
@@ -33,7 +33,7 @@ describe Neoid::ModelAdditions do
   
     context "find by id" do
       it "should find a neo_node for user" do
-        user = User.create(name: "Elad Ossadon", slug: "elado")
+        user = User.create(:name => "Elad Ossadon", :slug => "elado")
       
         user.neo_node.should_not be_nil
         user.neo_find_by_id.should_not be_nil
@@ -42,8 +42,8 @@ describe Neoid::ModelAdditions do
   end
   
   context "relationships" do
-    let(:user) { User.create(name: "Elad Ossadon", slug: "elado") }
-    let(:movie) { Movie.create(name: "Memento", slug: "memento-1999", year: 1999) }
+    let(:user) { User.create(:name => "Elad Ossadon", :slug => "elado") }
+    let(:movie) { Movie.create(:name => "Memento", :slug => "memento-1999", :year => 1999) }
     
     it "should create a relationship on neo4j" do
       user.like! movie
@@ -73,10 +73,10 @@ describe Neoid::ModelAdditions do
 
     it "should update neo4j on manual set of a collection" do
       movies = [
-        Movie.create(name: "Memento"),
-        Movie.create(name: "The Prestige"),
-        Movie.create(name: "The Dark Knight"),
-        Movie.create(name: "Spiderman")
+        Movie.create(:name => "Memento"),
+        Movie.create(:name => "The Prestige"),
+        Movie.create(:name => "The Dark Knight"),
+        Movie.create(:name => "Spiderman")
       ]
 
       user.neo_node.outgoing(:likes).length.should == 0
@@ -101,18 +101,18 @@ describe Neoid::ModelAdditions do
   end
 
   context "polymorphic relationship" do
-    let(:user) { User.create(name: "Elad Ossadon", slug: "elado") }
+    let(:user) { User.create(:name => "Elad Ossadon", :slug => "elado") }
 
     it "description" do
       followed = [
-        User.create(name: "Some One", slug: "someone"),
-        Movie.create(name: "The Prestige"),
-        Movie.create(name: "The Dark Knight")
+        User.create(:name => "Some One", :slug => "someone"),
+        Movie.create(:name => "The Prestige"),
+        Movie.create(:name => "The Dark Knight")
       ]
 
       expect {
         followed.each do |item|
-          user.user_follows.create(item: item)
+          user.user_follows.create(:item => item)
         end
       }.to change{ user.neo_node.outgoing(:follows).length }.to(followed.length)
 

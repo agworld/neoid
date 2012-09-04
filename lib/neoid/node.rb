@@ -17,7 +17,7 @@ module Neoid
           if subref_node_query.to_a.blank?
             Neoid::logger.info "Node#neo_subref_node not existing, creating #{neo_subref_rel_type}"
             
-            node = Neography::Node.create(type: self.name, name: neo_subref_rel_type)
+            node = Neography::Node.create(:type => self.name, :name => neo_subref_rel_type)
             Neography::Relationship.create(
               neo_subref_rel_type,
               Neoid.ref_node,
@@ -47,7 +47,7 @@ module Neoid
       def neo_create
         return unless Neoid.enabled?
         
-        data = self.to_neo.merge(ar_type: self.class.name, ar_id: self.id)
+        data = self.to_neo.merge(:ar_type => self.class.name, :ar_id => self.id)
         
         node = Neography::Node.create(data)
         

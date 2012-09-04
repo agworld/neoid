@@ -41,11 +41,11 @@ module Neoid
     end
     
     def index(field, options = {}, &block)
-      index_fields[field] = options.merge(block: block)
+      index_fields[field] = options.merge(:block => block)
     end
     
     def fulltext(field, options = {}, &block)
-      fulltext_fields[field] = options.merge(block: block)
+      fulltext_fields[field] = options.merge(:block => block)
     end
     
     def inspect

@@ -2,12 +2,12 @@ class User < ActiveRecord::Base
   include ActiveModel::Validations::Callbacks
   
   has_many :likes
-  has_many :movies, through: :likes
+  has_many :movies, :through => :likes
 
   has_many :user_follows
   
   def likes?(movie)
-    likes.where(movie_id: movie.id).exists?
+    likes.where(:movie_id => movie.id).exists?
   end
   
   def like!(movie)
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   end
   
   def unlike!(movie)
-    likes.where(movie_id: movie.id, user_id: self.id).destroy_all
+    likes.where(:movie_id => movie.id, :user_id => self.id).destroy_all
   end
   
   include Neoid::Node
@@ -30,7 +30,7 @@ class Movie < ActiveRecord::Base
   include ActiveModel::Validations::Callbacks
   
   has_many :likes
-  has_many :users, through: :likes
+  has_many :users, :through => :likes
   
   include Neoid::Node
   
@@ -52,26 +52,26 @@ end
 class UserFollow < ActiveRecord::Base
   include ActiveModel::Validations::Callbacks
 
-  belongs_to :user, dependent: :destroy
-  belongs_to :item, polymorphic: true
+  belongs_to :user, :dependent => :destroy
+  belongs_to :item, :polymorphic => true
   
   include Neoid::Relationship
   
   neoidable do |c|
-    c.relationship start_node: :user, end_node: :item, type: :follows
+    c.relationship :start_node => :user, :end_node => :item, :type => :follows
   end
 end
 
 class Like < ActiveRecord::Base
   include ActiveModel::Validations::Callbacks
   
-  belongs_to :user, dependent: :destroy
-  belongs_to :movie, dependent: :destroy
+  belongs_to :user, :dependent => :destroy
+  belongs_to :movie, :dependent => :destroy
   
   include Neoid::Relationship
   
   neoidable do |c|
-    c.relationship start_node: :user, end_node: :movie, type: :likes
+    c.relationship :start_node => :user, :end_node => :movie, :type => :likes
     c.field :rate
   end
 end

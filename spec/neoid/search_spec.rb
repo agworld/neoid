@@ -8,7 +8,7 @@ describe Neoid::ModelAdditions do
     it "should index and find node in fulltext" do
       Neoid.db.create_node_index(index_name, "fulltext", "lucene")
       
-      n = Neography::Node.create(name: "test hello world", year: 2012)
+      n = Neography::Node.create(:name => "test hello world", :year => 2012)
       Neoid.db.add_node_to_index(index_name, "name", n.name, n)
       Neoid.db.add_node_to_index(index_name, "year", n.year, n)
       
@@ -25,7 +25,7 @@ describe Neoid::ModelAdditions do
     
     it "should index item on save" do
       r = rand(1000000)
-      article = Article.create!(title: "Hello world #{r}", body: "Lorem ipsum dolor sit amet", year: r)
+      article = Article.create!(:title => "Hello world #{r}", :body => "Lorem ipsum dolor sit amet", :year => r)
 
       [
         "title:#{r}",
@@ -45,37 +45,37 @@ describe Neoid::ModelAdditions do
       end
       
       it "should find hits" do
-        article = Article.create!(title: "Hello world", body: "Lorem ipsum dolor sit amet", year: 2012)
+        article = Article.create!(:title => "Hello world", :body => "Lorem ipsum dolor sit amet", :year => 2012)
         
         Article.search("hello").hits.should == [ article.neo_node ]
       end
       
       it "should find results with a search string" do
-        article = Article.create!(title: "Hello world", body: "Lorem ipsum dolor sit amet", year: 2012)
+        article = Article.create!(:title => "Hello world", :body => "Lorem ipsum dolor sit amet", :year => 2012)
 
         Article.search("hello").results.should == [ article ]
       end
       
       it "should find results with a hash" do
         articles = [
-          Article.create!(title: "How to draw manga", body: "Lorem ipsum dolor sit amet", year: 2012),
-          Article.create!(title: "Manga x", body: "Lorem ipsum dolor sit amet", year: 2013)
+          Article.create!(:title => "How to draw manga", :body => "Lorem ipsum dolor sit amet", :year => 2012),
+          Article.create!(:title => "Manga x", :body => "Lorem ipsum dolor sit amet", :year => 2013)
         ]
 
 
-        Article.search(year: 2012).results.should == [ articles[0] ]
+        Article.search(:year => 2012).results.should == [ articles[0] ]
       end
     end
 
     context "search in multiple types" do
       before :each do
         @articles = [
-          Article.create!(title: "How to draw manga", body: "Lorem ipsum dolor sit amet", year: 2012),
-          Article.create!(title: "Manga x", body: "Lorem ipsum dolor sit amet", year: 2012)
+          Article.create!(:title => "How to draw manga", :body => "Lorem ipsum dolor sit amet", :year => 2012),
+          Article.create!(:title => "Manga x", :body => "Lorem ipsum dolor sit amet", :year => 2012)
         ]
 
         @movies = [
-          Movie.create!(name: "Anime is not Manga", slug: "anime")
+          Movie.create!(:name => "Anime is not Manga", :slug => "anime")
         ]
       end
 
